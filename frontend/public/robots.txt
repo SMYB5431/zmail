@@ -5,4 +5,4 @@ Allow: /
 Disallow: /api/
 
 # 站点地图
-Sitemap: https://mail.mdzz.uk/sitemap.xml 
+Sitemap: https://zmail.smyb.fun/sitemap.xml
