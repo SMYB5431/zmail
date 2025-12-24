@@ -19,7 +19,7 @@ const SEO: React.FC<SEOProps> = ({
   twitterCard = 'summary_large_image',
 }) => {
   const location = useLocation();
-  const url = `https://mail.mdzz.uk${location.pathname}`;
+  const url = `https://zmail.smyb.fun${location.pathname}`;
   const fullTitle = `${title} | 创建临时邮箱地址，接收邮件，无需注册，保护您的隐私安全`;
 
   useEffect(() => {
@@ -82,4 +82,4 @@ const SEO: React.FC<SEOProps> = ({
   return null; // 这个组件不渲染任何内容
 };
 
-export default SEO; 
+export default SEO;
