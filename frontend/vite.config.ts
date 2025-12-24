@@ -13,7 +13,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://api.mail.mdzz.uk',
+        target: 'http://api.zmail.smyb.fun',
         changeOrigin: true,
         secure: false,
         rewrite: (path) => path,
@@ -31,4 +31,4 @@ export default defineConfig({
       },
     },
   },
-}) 
+})
