@@ -4,6 +4,7 @@ import { D1Database } from '@cloudflare/workers-types';
 export interface Env {
   DB: D1Database;
   VITE_EMAIL_DOMAIN?: string;
+  INBOUND_EMAIL_SECRET?: string;
 }
 
 // 邮箱类型
