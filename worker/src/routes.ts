@@ -93,12 +93,61 @@ app.get('/api/mailboxes', (c) => {
         path: '/api/mailboxes',
         body: { address: '可选，不传则随机生成' }
       },
+      createRandomMailbox: {
+        method: 'GET',
+        path: '/api/mailboxes/new'
+      },
       getMailbox: {
         method: 'GET',
         path: '/api/mailboxes/:address'
       }
     }
   });
+});
+
+// 便捷创建随机邮箱（无需 body，便于 curl/脚本调用）
+app.get('/api/mailboxes/new', async (c) => {
+  try {
+    const expiresInHours = 24;
+    const ip = c.req.header('CF-Connecting-IP') || 'unknown';
+
+    // 从配置中选一个域名用于拼接完整邮箱
+    const emailDomains = c.env.VITE_EMAIL_DOMAIN || '';
+    const domains = emailDomains.split(',').map((domain: string) => domain.trim()).filter((domain: string) => domain);
+    const selectedDomain = domains[0] || '';
+
+    // 生成一个不重复的地址（最多尝试 5 次）
+    let address = '';
+    for (let i = 0; i < 5; i++) {
+      const candidate = generateRandomAddress();
+      const existing = await getMailbox(c.env.DB, candidate);
+      if (!existing) {
+        address = candidate;
+        break;
+      }
+    }
+
+    if (!address) {
+      return c.json({ success: false, error: '生成邮箱失败' }, 500);
+    }
+
+    const mailbox = await createMailbox(c.env.DB, {
+      address,
+      expiresInHours,
+      ipAddress: ip,
+    });
+
+    const emailAddress = selectedDomain ? `${mailbox.address}@${selectedDomain}` : mailbox.address;
+
+    return c.json({ success: true, mailbox, emailAddress });
+  } catch (error) {
+    console.error('创建邮箱失败:', error);
+    return c.json({
+      success: false,
+      error: '创建邮箱失败',
+      message: error instanceof Error ? error.message : String(error)
+    }, 400);
+  }
 });
 
 // 创建邮箱
