@@ -196,6 +196,16 @@ app.post('/api/mailboxes', async (c) => {
 app.get('/api/mailboxes/:address', async (c) => {
   try {
     const address = c.req.param('address');
+
+    // 避免把文档占位符当成真实参数传入
+    if (!address || address.startsWith(':')) {
+      return c.json({
+        success: false,
+        error: '无效的邮箱地址',
+        message: '请将 :address 替换为真实邮箱前缀。例如先调用 GET /api/mailboxes/new 获取 address。'
+      }, 400);
+    }
+
     const mailbox = await getMailbox(c.env.DB, address);
 
     if (!mailbox) {
@@ -217,6 +227,16 @@ app.get('/api/mailboxes/:address', async (c) => {
 app.delete('/api/mailboxes/:address', async (c) => {
   try {
     const address = c.req.param('address');
+
+    // 避免把文档占位符当成真实参数传入
+    if (!address || address.startsWith(':')) {
+      return c.json({
+        success: false,
+        error: '无效的邮箱地址',
+        message: '请将 :address 替换为真实邮箱前缀。例如先调用 GET /api/mailboxes/new 获取 address。'
+      }, 400);
+    }
+
     await deleteMailbox(c.env.DB, address);
 
     return c.json({ success: true });
@@ -234,6 +254,16 @@ app.delete('/api/mailboxes/:address', async (c) => {
 app.get('/api/mailboxes/:address/emails', async (c) => {
   try {
     const address = c.req.param('address');
+
+    // 避免把文档占位符当成真实参数传入
+    if (!address || address.startsWith(':')) {
+      return c.json({
+        success: false,
+        error: '无效的邮箱地址',
+        message: '请将 :address 替换为真实邮箱前缀。例如先调用 GET /api/mailboxes/new 获取 address。'
+      }, 400);
+    }
+
     const mailbox = await getMailbox(c.env.DB, address);
 
     if (!mailbox) {
