@@ -105,6 +105,7 @@ app.get('/api/mailboxes', (c) => {
   });
 });
 
+
 // 便捷创建随机邮箱（无需 body，便于 curl/脚本调用）
 app.get('/api/mailboxes/new', async (c) => {
   try {
@@ -114,7 +115,9 @@ app.get('/api/mailboxes/new', async (c) => {
     // 从配置中选一个域名用于拼接完整邮箱
     const emailDomains = c.env.VITE_EMAIL_DOMAIN || '';
     const domains = emailDomains.split(',').map((domain: string) => domain.trim()).filter((domain: string) => domain);
-    const selectedDomain = domains[0] || '';
+
+    // 随机选择一个域名
+    const selectedDomain = domains.length > 0 ? domains[Math.floor(Math.random() * domains.length)] : '';
 
     // 生成一个不重复的地址（最多尝试 5 次）
     let address = '';
@@ -149,6 +152,7 @@ app.get('/api/mailboxes/new', async (c) => {
     }, 400);
   }
 });
+
 
 // 创建邮箱
 app.post('/api/mailboxes', async (c) => {
@@ -399,4 +403,3 @@ app.delete('/api/emails/:id', async (c) => {
 });
 
 export default app;
-
