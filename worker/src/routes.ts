@@ -85,10 +85,20 @@ app.post('/api/inbound/email', async (c) => {
 // 邮箱集合（GET 仅返回使用说明，避免直接访问出现 404 造成困惑）
 app.get('/api/mailboxes', (c) => {
   return c.json({
-    success: false,
-    error: '不支持的请求方法',
-    message: '请使用 POST /api/mailboxes 创建邮箱；或 GET /api/mailboxes/:address 查询邮箱信息。'
-  }, 405);
+    success: true,
+    message: '请使用 POST /api/mailboxes 创建邮箱；或 GET /api/mailboxes/:address 查询邮箱信息。',
+    usage: {
+      createMailbox: {
+        method: 'POST',
+        path: '/api/mailboxes',
+        body: { address: '可选，不传则随机生成' }
+      },
+      getMailbox: {
+        method: 'GET',
+        path: '/api/mailboxes/:address'
+      }
+    }
+  });
 });
 
 // 创建邮箱
