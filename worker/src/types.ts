@@ -144,3 +144,4 @@ export interface SendEmailParams {
   textContent?: string; // 纯文本内容
   htmlContent?: string; // HTML内容
 }
+
